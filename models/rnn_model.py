@@ -58,11 +58,11 @@ class RNNModel(keras.Model):
         x = self.embedding(inputs, training=training)
 
         for rnn_layer in self.rnn:
-            x = rnn_layer(x)
+            x = rnn_layer(x, training=training)
 
         for dense_layer in self.dense:
-            x = dense_layer(x)
-        x = self.output_layer(x)
+            x = dense_layer(x, training=training)
+        x = self.output_layer(x, training=training)
         return x
 
     def build(self, input_shape):
