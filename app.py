@@ -21,7 +21,7 @@ diac_tok = keras.layers.TextVectorization(
     vocabulary=constants.get_diac_vocabulary(),
 )
 diacritizer = Diacritizer(
-    servant="./servants/gru-emb128-2rnn128-1dense256",
+    servant="./servants/lstm-emb128-2rnn128-1dense256",
     letters_tokenizer=letters_tok,
     diacritics_tokenizer=diac_tok,
 )
