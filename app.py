@@ -4,21 +4,28 @@ import keras
 import tensorflow as tf
 from modules.diacritizer import Diacritizer
 from utils import constants
+import pickle
 
 app = Flask(__name__)
 api = Api(app)
+with open("./vocabs/letters_vocabulary.pkl", "rb") as f:
+    letters_vocab = pickle.load(f)
+
+with open("./vocabs/diac_vocabulary.pkl", "rb") as f:
+    diac_vocab = pickle.load(f)
+
 letters_tok = keras.layers.TextVectorization(
     ragged=True,
     standardize=lambda x: tf.concat([["s"], x, ["e"]], axis=-1),
     split=None,
-    vocabulary=constants.get_letters_vocabulary(),
+    vocabulary=letters_vocab,
 )
 
 diac_tok = keras.layers.TextVectorization(
     standardize=lambda x: tf.concat([[" "], x, [" "]], axis=-1),
     ragged=True,
     split=None,
-    vocabulary=constants.get_diac_vocabulary(),
+    vocabulary=diac_vocab,
 )
 diacritizer = Diacritizer(
     servant="./servants/lstm-emb128-2rnn128-1dense256",
