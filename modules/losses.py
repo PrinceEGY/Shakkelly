@@ -1,6 +1,7 @@
 import keras
 import keras.ops as ops
 
+
 def masked_loss(labels, preds):
     loss_fn = keras.losses.SparseCategoricalCrossentropy(
         from_logits=True, reduction=None

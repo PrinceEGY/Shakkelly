@@ -24,7 +24,7 @@ train:
   staircase: false
   # decay_steps_multiple value is multiple of steps_per_epoch
   # ex. 20 ->  20 * steps_per_epoch -> reducing the lr every 20 epochs
-  decay_steps_multiple: 20 
+  decay_steps_multiple: 20
 
   # Callbacks
   early_stopping:
@@ -34,7 +34,7 @@ train:
     restore_best_weights: true
     verbose: 1
 
-  checkpoint: 
+  checkpoint:
     allow: true
     save_weights_only: true
     # save_freq_multiple value is multiple of steps_per_epoch
