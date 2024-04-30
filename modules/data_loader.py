@@ -7,13 +7,12 @@ class DataLoader:
     def __init__(self, letter_tokenizer, diac_tokenizer):
         self.letter_tokenizer = letter_tokenizer
         self.diac_tokenizer = diac_tokenizer
-    
-    def from_csv(self, file_path, only_text=True):
-        ds = tf.data.experimental.make_csv_dataset(file_path, batch_size=1)
-        if only_text:
-            ds = ds.map(lambda x: x["text"])
-        return ds.unbatch()
-    
+
+    def from_csv(self, file_path):
+        # TODO: replace reading files using pandas to reduce loading time
+        df = pd.read_csv(file_path)
+        return tf.data.Dataset.from_tensor_slices(df["text"])
+
     def process_ds(self, ds, batch_size=32, shuffle_buffer=1000):
         ds = (
         ds.map(self.tf_strip_tashkeel, tf.data.AUTOTUNE)
