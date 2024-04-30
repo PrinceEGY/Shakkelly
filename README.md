@@ -1,1 +1,1 @@
-# Shakkelly - شَكِّل لِي
+# Shakkelly - شَكِّلْ لِي
