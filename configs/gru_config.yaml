@@ -1,0 +1,43 @@
+model:
+  type: rnn
+  params:
+    embedding_dims: 128
+    rnn_type: GRU
+    rnn_layers: 2
+    rnn_units: 128
+    dense_layers: 1
+    dense_units: 256
+    dropout_rate: 0.4
+
+train:
+  epochs: 50
+  steps_per_epoch: 100
+  validation_steps: 30
+  verbose: 1
+  weights_save_dir: ./weights/
+  servant_save_dir: ./servants/
+
+  # Optimizer's learning rate
+  learning_rate: 0.001
+  lr_schedule_InverseTimeDecay: true
+  decay_rate: 1
+  staircase: false
+  # decay_steps_multiple value is multiple of steps_per_epoch
+  # ex. 20 ->  20 * steps_per_epoch -> reducing the lr every 20 epochs
+  decay_steps_multiple: 20 
+
+  # Callbacks
+  early_stopping:
+    allow: true
+    monitor: val_loss
+    patience: 10
+    restore_best_weights: true
+    verbose: 1
+
+  checkpoint: 
+    allow: true
+    save_weights_only: true
+    # save_freq_multiple value is multiple of steps_per_epoch
+    # ex. 25 ->  25 * steps_per_epoch -> saving the model every 25 epochs
+    save_freq_multiple: 25
+    verbose: 1
