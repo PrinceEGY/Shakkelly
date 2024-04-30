@@ -36,8 +36,17 @@ class Trainer:
         self.weights_save_dir = weights_save_dir
         self.servant_save_dir = servant_save_dir
 
-    def train(self):
+    def train(self, resume_training=False, weights=None):
         self.model.compile(optimizer=self.optimizer, loss=self.loss_fn)
+        if resume_training == True:
+            assert weights is not None, "weights path is required for resuming"
+            print(f"Resuming training from {weights}")
+            print("Loading weights...")
+            self.model.fit(
+                self.train_ds.unbatch().batch(1).take(1), epochs=1, verbose=0
+            )  # initialize model to load weights
+            self.model.load_weights(weights)
+        print("Training...")
         history = self.model.fit(
             self.train_ds,
             validation_data=self.valid_ds,
