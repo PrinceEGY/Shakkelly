@@ -41,3 +41,9 @@ class DataLoader:
         text.set_shape((None,))
         tashkeel.set_shape((None,))
         return text, tashkeel
+
+    def merge_datasets(self, datasets, shuffle_buffer=1000):
+        ds = datasets[0]
+        for d in datasets[1:]:
+            ds = ds.concatenate(d)
+        return ds.shuffle(shuffle_buffer)
