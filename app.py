@@ -1,7 +1,13 @@
+import os
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+
 from flask import Flask, request
 from flask_restful import Resource, Api
 import keras
 import tensorflow as tf
+
+tf.get_logger().setLevel("ERROR")
 from modules.diacritizer import Diacritizer
 from utils import constants
 
