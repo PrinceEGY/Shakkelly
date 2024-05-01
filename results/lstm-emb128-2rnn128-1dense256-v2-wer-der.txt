@@ -1,0 +1,4 @@
+WER with case ending: 15.083373124999941
+WER without case ending: 9.458206250000202
+DER with case ending: 3.999191250000085
+DER without case ending: 3.1505856250000472
