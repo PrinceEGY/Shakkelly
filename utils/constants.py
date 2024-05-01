@@ -1,3 +1,5 @@
+import pickle
+
 # Harakat
 FATHA = "\u064e"
 DAMMA = "\u064f"
@@ -21,17 +23,12 @@ VALID_ARABIC = HARAKAT + list(AR_LETTERS) + PUNCTUATIONS
 
 
 def get_diac_vocabulary():
-    vocab = ["", "[UNK]", " "]
-    vocab += HARAKAT
-
-    tashkeel = set(HARAKAT) - set([SHADDA, SUKUN])
-    for diac in tashkeel:
-        vocab.append(SHADDA + diac)
-
+    with open("./vocabs/diac_vocabulary.pkl", "rb") as f:
+        vocab = pickle.load(f)
     return vocab
 
 
 def get_letters_vocabulary():
-    vocab = ["", "[UNK]", " ", "s", "e"]
-    vocab += list(AR_LETTERS)
+    with open("./vocabs/letters_vocabulary.pkl", "rb") as f:
+        vocab = pickle.load(f)
     return vocab
