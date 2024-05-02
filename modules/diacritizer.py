@@ -8,25 +8,36 @@ from utils.preprocessor import Preprocessor
 class Diacritizer:
     def __init__(
         self,
-        servant,
-        letters_tokenizer,
-        diacritics_tokenizer,
+        servant="./servants/lstm-emb128-2rnn128-1dense256-v3",
+        letters_tokenizer=None,
+        diacritics_tokenizer=None,
     ):
         self.servant = tf.saved_model.load(servant)
-        self.letters_tokenizer = letters_tokenizer
-        self.diacritics_tokenizer = diacritics_tokenizer
+        if letters_tokenizer is None:
+            self.letters_tokenizer = self._get_default_letters_tokenizer()
+        else:
+            self.letters_tokenizer = letters_tokenizer
+        if diacritics_tokenizer is None:
+            self.diacritics_tokenizer = self._get_default_diac_tokenizer()
+        else:
+            self.diacritics_tokenizer = diacritics_tokenizer
+
         self.letters_w2i = keras.layers.StringLookup(
-            vocabulary=letters_tokenizer.get_vocabulary(), mask_token=""
+            vocabulary=self.letters_tokenizer.get_vocabulary(), mask_token=""
         )
         self.letters_i2w = keras.layers.StringLookup(
-            vocabulary=letters_tokenizer.get_vocabulary(), mask_token="", invert=True
+            vocabulary=self.letters_tokenizer.get_vocabulary(),
+            mask_token="",
+            invert=True,
         )
 
         self.diacritics_w2i = keras.layers.StringLookup(
-            vocabulary=diacritics_tokenizer.get_vocabulary(), mask_token=""
+            vocabulary=self.diacritics_tokenizer.get_vocabulary(), mask_token=""
         )
         self.diacritics_i2w = keras.layers.StringLookup(
-            vocabulary=diacritics_tokenizer.get_vocabulary(), mask_token="", invert=True
+            vocabulary=self.diacritics_tokenizer.get_vocabulary(),
+            mask_token="",
+            invert=True,
         )
 
     def diacritize(self, text):
@@ -89,3 +100,19 @@ class Diacritizer:
             [char.decode("utf-8") for char in d.numpy()]
             for d in self.diacritics_i2w(diacritics)
         ]
+
+    def _get_default_letters_tokenizer(self):
+        return keras.layers.TextVectorization(
+            ragged=True,
+            standardize=lambda x: tf.concat([["s"], x, ["e"]], axis=-1),
+            split=None,
+            vocabulary=constants.get_letters_vocabulary(),
+        )
+
+    def _get_default_diac_tokenizer(self):
+        return keras.layers.TextVectorization(
+            standardize=lambda x: tf.concat([[" "], x, [" "]], axis=-1),
+            ragged=True,
+            split=None,
+            vocabulary=constants.get_diac_vocabulary(),
+        )
