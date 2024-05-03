@@ -40,6 +40,9 @@ class Diacritizer:
             invert=True,
         )
 
+    def __call__(self, text):
+        return self.diacritize(text)
+
     def diacritize(self, text):
         splits = self.split_text(text)
         diacretized_text = self.join_and_diacritize_splits(splits)
