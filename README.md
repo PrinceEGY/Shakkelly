@@ -34,7 +34,7 @@ import requests
 result = requests.post(
     "https://shakkelly.onrender.com/shakkel",
     json={"text": "السلام عليكم ورحمة الله"},
-)
+).json()
 print(result)
 # {'diacritized': 'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ'}
 ```
